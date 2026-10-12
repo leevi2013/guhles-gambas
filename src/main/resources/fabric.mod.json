@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "oregamba",
+  "version": "${version}",
+  "name": "Ore Gamba",
+  "description": "A blue chest-style ore slot machine with virtual coins and protected bet validation.",
+  "authors": ["Ore Gamba contributors"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "de.mrgamba.oregamba.GambaMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
