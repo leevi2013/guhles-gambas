@@ -1,0 +1,149 @@
+================================================================================
+FILE: ore-gamba/README.md
+================================================================================
+
+# Ore Gamba (Fabric)
+
+Eine Minecraft-Java-Mod mit einer blauen 9×3-Chest-Slotmaschine, sechs Erzsymbolen, virtuellen Coins und strikter Einsatzvalidierung.
+
+## Zielversion
+
+- Minecraft Java Edition 1.21.11
+- Fabric Loader 0.18.4 oder neuer
+- Fabric API 0.141.3+1.21.11
+- Java 21
+
+## Funktionen
+
+- /gamba öffnet das blaue Chest-GUI.
+- /gamba bet <zahl> setzt den Einsatz.
+- /gamba coins zeigt den Kontostand.
+- Einsatzschaltflächen im GUI.
+- Drehdauer zufällig zwischen 2 und 4 Sekunden.
+- Auszahlung bei drei gleichen Symbolen.
+- 1.000 virtuelle Start-Coins pro Spieler.
+
+## Multiplikatoren
+
+Kohleerz: 0,5x
+Eisenerz: 1,2x
+Golderz: 2,0x
+Diamanterz: 5,0x
+Smaragderz: 10,0x
+Antiker Schrott: 25,0x
+
+Es wird kein Echtgeld verwendet.
+
+## Lokal bauen
+
+Java 21 und Gradle installieren und im Projektordner ausführen:
+
+gradle build
+
+Die Mod liegt nach einem erfolgreichen Build unter build/libs/.
+
+
+================================================================================
+FILE: ore-gamba/settings.gradle
+================================================================================
+
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.fabricmc.net/' }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'ore-gamba'
+
+
+================================================================================
+FILE: ore-gamba/build.gradle
+================================================================================
+
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    // Fabric Loom stellt die erforderlichen Minecraft-Repositories bereit.
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'minecraft_version', project.minecraft_version
+
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version,
+               'minecraft_version': project.minecraft_version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+    options.encoding = 'UTF-8'
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from('LICENSE') {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
+}
+
+
+================================================================================
+FILE: ore-gamba/gradle.properties
+================================================================================
+
+org.gradle.jvmargs=-Xmx3G
+org.gradle.parallel=true
+org.gradle.configuration-cache=false
+
+minecraft_version=1.21.11
+yarn_mappings=1.21.11+build.6
+loader_version=0.18.4
+loom_version=1.14.10
+fabric_api_version=0.141.3+1.21.11
+
+mod_version=1.0.0
+maven_group=de.mrgamba
+archives_base_name=ore-gamba
+
+
+================================================================================
+FILE: ore-gamba/.gitignore
+================================================================================
+
+.gradle/
+build/
+out/
+run/
+.idea/
+*.iml
+.DS_Store
+
+
+================================================================================
+FILE: ore
